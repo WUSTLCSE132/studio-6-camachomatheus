@@ -1,10 +1,11 @@
 package studio6;
 
+//import assignment5.SerialComm;
 import jssc.*;
 
 public class SerialComm {
 
-	SerialPort port;
+	static SerialPort port;
 
 	private boolean debug;  // Indicator of "debugging mode"
 	
@@ -23,14 +24,62 @@ public class SerialComm {
 			SerialPort.STOPBITS_1,
 			SerialPort.PARITY_NONE);
 		
-		debug = false; // Default is to NOT be in debug mode
+		debug = true; // Default is to NOT be in debug mode
 	}
 		
 	// TODO: Add writeByte() method from Studio 5
 	
+	void writeByte(byte i) throws SerialPortException
+	{
+		
+		if(debug==true)
+		{
+			String hex=Integer.toHexString(i);
+			//System.out.print("<0x");
+			System.out.println(hex);
+			//System.out.println(">");
+			
+		}
+		//port.writeByte(i);
+		
+			
+		}
+	
 	// TODO: Add available() method
-	
+	boolean available() throws SerialPortException
+	{
+		if (port.getInputBufferBytesCount()>0)
+		{
+			return true;
+		}else {
+			return false;
+		}
+		
+	}
 	// TODO: Add readByte() method	
+	byte readByte() throws SerialPortException
+	{
+		
+		return port.readBytes(1)[0];
+		
+	}
+	public static void main(String[] args) throws SerialPortException
+	{
+		SerialComm port = new SerialComm("/dev/cu.usbserial-DN02ZB5N");
+		
+		while(true)
+		{
+			if(port.available())
+			{
+				byte input=port.readByte();
+				System.out.println((char)input);
+				//port.writeByte(input);
+			} 
+			
+			
+		}
+		
+	}
 	
-	// TODO: Add a main() method
+
 }
